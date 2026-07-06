@@ -1,0 +1,84 @@
+server:
+  port: 4045
+  http2:
+    enabled: true
+
+spring:
+  application:
+    name: auth-service
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/auth_service_db}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:sapassword}
+    hikari:
+      pool-name: AuthServiceHikariPool
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+  jta:
+    enabled: false
+  kafka:
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+eureka:
+  instance:
+    hostname: localhost
+    prefer-ip-address: false
+    instance-id: ${spring.application.name}:${server.port}
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
+
+springdoc:
+  show-actuator: true
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+
+info:
+  app:
+    name: authService
+    description: Auth Service
+    version: 1.0
+
+management:
+  info:
+    build:
+      enabled: true
+    env:
+      enabled: true
+    java:
+      enabled: true
+    process:
+      enabled: true
+    os:
+      enabled: true
+  endpoint:
+    health:
+      show-details: ALWAYS
+      probes:
+        enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+logging:
+  level:
+    org.springframework: INFO
+    com.binhtv.authservice: INFO
+
+jwt:
+  secretKey: secret
+  issuer: www.farukgenc.com
+  expirationMinute: 10
+
+swagger:
+  app-name: Auth Service
+  app-description: "Spring Boot authentication and user management service with Spring Security, JWT, PostgreSQL, MapStruct, Lombok, and Swagger."
+  app-version: 4.0.0

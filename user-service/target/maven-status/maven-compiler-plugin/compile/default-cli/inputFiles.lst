@@ -1,0 +1,7 @@
+D:\2026\Java_Spring\springboot-microservice-boilerplate\user-service\src\main\java\com\binhtv\userservice\consumer\UserRegisteredConsumer.java
+D:\2026\Java_Spring\springboot-microservice-boilerplate\user-service\src\main\java\com\binhtv\userservice\controller\UserProfileController.java
+D:\2026\Java_Spring\springboot-microservice-boilerplate\user-service\src\main\java\com\binhtv\userservice\dto\UserRegisteredEvent.java
+D:\2026\Java_Spring\springboot-microservice-boilerplate\user-service\src\main\java\com\binhtv\userservice\model\UserProfile.java
+D:\2026\Java_Spring\springboot-microservice-boilerplate\user-service\src\main\java\com\binhtv\userservice\repository\UserProfileRepository.java
+D:\2026\Java_Spring\springboot-microservice-boilerplate\user-service\src\main\java\com\binhtv\userservice\service\UserProfileService.java
+D:\2026\Java_Spring\springboot-microservice-boilerplate\user-service\src\main\java\com\binhtv\userservice\UserServiceApplication.java

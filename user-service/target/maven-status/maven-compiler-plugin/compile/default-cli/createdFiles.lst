@@ -1,0 +1,7 @@
+com\binhtv\userservice\controller\UserProfileController.class
+com\binhtv\userservice\repository\UserProfileRepository.class
+com\binhtv\userservice\model\UserProfile.class
+com\binhtv\userservice\service\UserProfileService.class
+com\binhtv\userservice\dto\UserRegisteredEvent.class
+com\binhtv\userservice\consumer\UserRegisteredConsumer.class
+com\binhtv\userservice\UserServiceApplication.class
