@@ -6,20 +6,23 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-
-import com.binhtv.productservice.model.entity.Brand;
-import com.binhtv.productservice.model.entity.Category;
+import java.util.UUID;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductResponseDto {
-   private String name;
+    private UUID id;
+    private String name;
     private BigDecimal price;
+    private String imgUrl;
     private Integer discount;
     private Integer quantity;
     private String description;
-    private Brand brand_id;
-    private Category category_id;
+    private UUID brandId;
+    private String brandName;
+    private UUID categoryId;
+    private String categoryName;
+    private String categoryImgUrl;
 }

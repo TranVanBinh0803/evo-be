@@ -1,0 +1,7 @@
+com\binhtv\uploadservice\dto\UploadResponseDto.class
+com\binhtv\uploadservice\controller\UploadController.class
+com\binhtv\uploadservice\dto\ApiResponse.class
+com\binhtv\uploadservice\UploadServiceApplication.class
+com\binhtv\uploadservice\dto\UploadResponseDto$UploadResponseDtoBuilder.class
+com\binhtv\uploadservice\service\UploadService.class
+com\binhtv\uploadservice\config\AwsS3Config.class

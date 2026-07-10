@@ -5,6 +5,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>product-service</module>
+        <module>upload-service</module>
 		<module>api-gateway</module>
 		<module>discovery-server</module>
         <module>order-service</module>

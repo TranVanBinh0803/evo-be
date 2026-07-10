@@ -1,4 +1,4 @@
-package com.binhtv.productservice.model.dto;
+package com.binhtv.uploadservice.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,6 +11,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ApiResponse<T> {
     private String message;
-	private int statusCode;
-	private T data;
+    private int statusCode;
+    private T data;
 }

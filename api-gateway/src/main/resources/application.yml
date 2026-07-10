@@ -19,6 +19,26 @@ spring:
     gateway:
       server:
         webflux:
+          globalcors:
+            add-to-simple-url-handler-mapping: true
+            cors-configurations:
+              '[/**]':
+                allowedOrigins:
+                  - http://localhost:5173
+                allowedMethods:
+                  - GET
+                  - POST
+                  - PUT
+                  - PATCH
+                  - DELETE
+                  - OPTIONS
+                allowedHeaders:
+                  - '*'
+                exposedHeaders:
+                  - Authorization
+                allowCredentials: true
+          default-filters:
+            - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_UNIQUE
           routes:
           - id: order-service
             uri: lb://order-service
@@ -33,13 +53,23 @@ spring:
           - id: product-service
             uri: lb://product-service
             predicates:
-              - Path=/api/products/**
+              - Path=/api/products,/api/products/**,/api/categories,/api/categories/**,/api/brands,/api/brands/**
             filters:
               - name: CircuitBreaker
                 args:
                   name: product
                   fallbackUri: forward:/fallbacks/product
 
+
+          - id: upload-service
+            uri: lb://upload-service
+            predicates:
+              - Path=/api/uploads,/api/uploads/**
+            filters:
+              - name: CircuitBreaker
+                args:
+                  name: upload
+                  fallbackUri: forward:/fallbacks/upload
           - id: auth-service
             uri: lb://auth-service
             predicates:
@@ -89,6 +119,16 @@ resilience4j.circuitbreaker:
         permittedNumberOfCallsInHalfOpenState: 3
         automaticTransitionFromOpenToHalfOpenEnabled: true
 
+      upload:
+        registerHealthIndicator: true
+        event-consumer-buffer-size: 10
+        slidingWindowSize: 5
+        slidingWindowType: COUNT_BASED
+        failureRateThreshold: 50
+        waitDurationInOpenState: 5s
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+
       order:
         registerHealthIndicator: true
         event-consumer-buffer-size: 10
@@ -116,3 +156,9 @@ resilience4j.circuitbreaker:
         waitDurationInOpenState: 5s
         permittedNumberOfCallsInHalfOpenState: 3
         automaticTransitionFromOpenToHalfOpenEnabled: true
+
+resilience4j.timelimiter:
+    instances:
+      upload:
+        timeoutDuration: 30s
+        cancelRunningFuture: false

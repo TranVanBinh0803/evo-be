@@ -1,16 +1,16 @@
 package com.binhtv.productservice.model.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ApiResponse<T> {
+public class ValidationErrorDto {
+    private String field;
     private String message;
-	private int statusCode;
-	private T data;
+    private Object rejectedValue;
 }
