@@ -1,0 +1,19 @@
+package com.binhtv.apigateway.configuration;
+
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Getter
+@Setter
+@Configuration
+@ConfigurationProperties(prefix = "gateway.jwt")
+public class GatewayJwtProperties {
+    private String secretKey;
+    private String issuer;
+    private List<String> publicPaths = new ArrayList<>();
+}

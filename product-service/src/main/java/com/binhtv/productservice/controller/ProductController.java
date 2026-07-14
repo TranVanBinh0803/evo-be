@@ -3,59 +3,68 @@ package com.binhtv.productservice.controller;
 import com.binhtv.productservice.model.dto.ApiResponse;
 import com.binhtv.productservice.model.dto.ProductRequestDto;
 import com.binhtv.productservice.model.dto.ProductResponseDto;
+import com.binhtv.productservice.model.dto.support.ApiResponses;
+import com.binhtv.productservice.model.enums.ProductSortField;
 import com.binhtv.productservice.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/products")
 @RequiredArgsConstructor
 public class ProductController {
+    private static final int MAX_PAGE_SIZE = 100;
 
     private final ProductService productService;
 
     @PostMapping
     public ResponseEntity<ApiResponse<ProductResponseDto>> createProduct(
             @Valid @RequestBody ProductRequestDto productRequestDto) {
-        final ProductResponseDto productResponse = productService.create(productRequestDto);
-        final ApiResponse<ProductResponseDto> response = new ApiResponse<>(
-                "Create product successful!",
-                HttpStatus.CREATED.value(),
-                productResponse);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        ProductResponseDto productResponse = productService.create(productRequestDto);
+        return ApiResponses.created("Create product successful!", productResponse);
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<ProductResponseDto>>> getAllProducts() {
-        final List<ProductResponseDto> products = productService.getProducts();
-        final ApiResponse<List<ProductResponseDto>> response = new ApiResponse<>(
-                "Get products successful!",
-                HttpStatus.OK.value(),
-                products);
+    public ResponseEntity<ApiResponse<Page<ProductResponseDto>>> getAllProducts(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "12") Integer size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "ASC") Sort.Direction direction) {
+        Pageable pageable = buildPageable(page, size, sortBy, direction);
+        Page<ProductResponseDto> products = productService.getProducts(pageable);
 
-        return ResponseEntity.ok(response);
+        return ApiResponses.ok("Get products successful!", products);
     }
 
     @GetMapping("/{productId}")
     public ResponseEntity<ApiResponse<ProductResponseDto>> getProductById(@PathVariable UUID productId) {
-        final ProductResponseDto product = productService.getById(productId);
-        final ApiResponse<ProductResponseDto> response = new ApiResponse<>(
-                "Get product successful!",
-                HttpStatus.OK.value(),
-                product);
+        ProductResponseDto product = productService.getById(productId);
+        return ApiResponses.ok("Get product successful!", product);
+    }
 
-        return ResponseEntity.ok(response);
+    private Pageable buildPageable(Integer page, Integer size, String sortBy, Sort.Direction direction) {
+        if (page < 0) {
+            throw new IllegalArgumentException("Page index must not be negative.");
+        }
+        if (size < 1 || size > MAX_PAGE_SIZE) {
+            throw new IllegalArgumentException("Page size must be between 1 and %d.".formatted(MAX_PAGE_SIZE));
+        }
+
+        ProductSortField sortField = ProductSortField.from(sortBy);
+        return PageRequest.of(page, size, Sort.by(direction, sortField.getProperty()));
     }
 }

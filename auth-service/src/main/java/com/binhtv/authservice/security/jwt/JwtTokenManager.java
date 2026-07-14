@@ -56,7 +56,7 @@ public class JwtTokenManager {
 		return expirationDateFromToken.before(new Date());
 	}
 
-	private Date getExpirationDateFromToken(String token) {
+	public Date getExpirationDateFromToken(String token) {
 
 		final DecodedJWT decodedJWT = getDecodedJWT(token);
 

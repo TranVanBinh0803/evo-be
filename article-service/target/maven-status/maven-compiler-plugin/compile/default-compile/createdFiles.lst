@@ -1,0 +1,13 @@
+com\binhtv\articleservice\dto\ValidationErrorDto.class
+com\binhtv\articleservice\dto\ApiResponse.class
+com\binhtv\articleservice\dto\ValidationErrorDto$ValidationErrorDtoBuilder.class
+com\binhtv\articleservice\dto\ArticleRequestDto.class
+com\binhtv\articleservice\model\Article$ArticleBuilder.class
+com\binhtv\articleservice\dto\ArticleResponseDto$ArticleResponseDtoBuilder.class
+com\binhtv\articleservice\service\ArticleService.class
+com\binhtv\articleservice\exception\GlobalExceptionHandler.class
+com\binhtv\articleservice\repository\ArticleRepository.class
+com\binhtv\articleservice\ArticleServiceApplication.class
+com\binhtv\articleservice\controller\ArticleController.class
+com\binhtv\articleservice\dto\ArticleResponseDto.class
+com\binhtv\articleservice\model\Article.class

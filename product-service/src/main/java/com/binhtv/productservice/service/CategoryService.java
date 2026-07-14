@@ -1,42 +1,32 @@
 package com.binhtv.productservice.service;
 
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-
 import com.binhtv.productservice.model.dto.CategoryRequestDto;
 import com.binhtv.productservice.model.dto.CategoryResponseDto;
 import com.binhtv.productservice.model.entity.Category;
+import com.binhtv.productservice.model.mapper.CategoryMapper;
 import com.binhtv.productservice.reporsitory.CategoryRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class CategoryService {
     private final CategoryRepository categoryRepository;
+    private final CategoryMapper categoryMapper;
 
+    @Transactional(readOnly = true)
     public List<CategoryResponseDto> getCategories() {
         return categoryRepository.findAll().stream()
-                .map(this::mapToDto)
+                .map(categoryMapper::toDto)
                 .toList();
     }
 
+    @Transactional
     public CategoryResponseDto create(CategoryRequestDto categoryRequestDto) {
-        Category category = Category.builder()
-                .name(categoryRequestDto.getName())
-                .imgUrl(categoryRequestDto.getImgUrl())
-                .build();
-
-        Category savedCategory = categoryRepository.save(category);
-        return mapToDto(savedCategory);
-    }
-
-    private CategoryResponseDto mapToDto(Category category) {
-        return CategoryResponseDto.builder()
-                .id(category.getId())
-                .name(category.getName())
-                .imgUrl(category.getImgUrl())
-                .build();
+        Category category = categoryMapper.toEntity(categoryRequestDto);
+        return categoryMapper.toDto(categoryRepository.save(category));
     }
 }

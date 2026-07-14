@@ -1,5 +1,6 @@
 package com.binhtv.apigateway.controller;
 
+import com.binhtv.apigateway.dto.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,56 +13,67 @@ import org.springframework.web.bind.annotation.RestController;
 public class GatewayFallback {
 
     @GetMapping("/product")
-    public ResponseEntity<String> productFallback() {
+    public ResponseEntity<ApiResponse<Void>> productFallback() {
         return fallbackResponse("Product service is unavailable. Please try later...");
     }
 
     @PostMapping("/product")
-    public ResponseEntity<String> productPostFallback() {
+    public ResponseEntity<ApiResponse<Void>> productPostFallback() {
         return fallbackResponse("Product service is unavailable. Please try later...");
     }
 
+    @GetMapping("/article")
+    public ResponseEntity<ApiResponse<Void>> articleFallback() {
+        return fallbackResponse("Article service is unavailable. Please try later...");
+    }
+
+    @PostMapping("/article")
+    public ResponseEntity<ApiResponse<Void>> articlePostFallback() {
+        return fallbackResponse("Article service is unavailable. Please try later...");
+    }
+
     @GetMapping("/upload")
-    public ResponseEntity<String> uploadFallback() {
+    public ResponseEntity<ApiResponse<Void>> uploadFallback() {
         return fallbackResponse("Upload service is unavailable. Please try later...");
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadPostFallback() {
+    public ResponseEntity<ApiResponse<Void>> uploadPostFallback() {
         return fallbackResponse("Upload service is unavailable. Please try later...");
     }
 
     @GetMapping("/order")
-    public ResponseEntity<String> orderFallback() {
+    public ResponseEntity<ApiResponse<Void>> orderFallback() {
         return fallbackResponse("Order service is unavailable. Please try later...");
     }
 
     @PostMapping("/order")
-    public ResponseEntity<String> orderPostFallback() {
+    public ResponseEntity<ApiResponse<Void>> orderPostFallback() {
         return fallbackResponse("Order service is unavailable. Please try later...");
     }
 
     @GetMapping("/auth")
-    public ResponseEntity<String> authFallback() {
+    public ResponseEntity<ApiResponse<Void>> authFallback() {
         return fallbackResponse("Auth service is unavailable. Please try later...");
     }
 
     @PostMapping("/auth")
-    public ResponseEntity<String> authPostFallback() {
+    public ResponseEntity<ApiResponse<Void>> authPostFallback() {
         return fallbackResponse("Auth service is unavailable. Please try later...");
     }
 
     @GetMapping("/user")
-    public ResponseEntity<String> userFallback() {
+    public ResponseEntity<ApiResponse<Void>> userFallback() {
         return fallbackResponse("User service is unavailable. Please try later...");
     }
 
     @PostMapping("/user")
-    public ResponseEntity<String> userPostFallback() {
+    public ResponseEntity<ApiResponse<Void>> userPostFallback() {
         return fallbackResponse("User service is unavailable. Please try later...");
     }
 
-    private ResponseEntity<String> fallbackResponse(String message) {
-        return new ResponseEntity<>(message, HttpStatus.SERVICE_UNAVAILABLE);
+    private ResponseEntity<ApiResponse<Void>> fallbackResponse(String message) {
+        ApiResponse<Void> response = new ApiResponse<>(message, HttpStatus.SERVICE_UNAVAILABLE.value(), null);
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(response);
     }
 }

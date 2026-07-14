@@ -61,6 +61,16 @@ spring:
                   fallbackUri: forward:/fallbacks/product
 
 
+
+          - id: article-service
+            uri: lb://article-service
+            predicates:
+              - Path=/api/articles,/api/articles/**
+            filters:
+              - name: CircuitBreaker
+                args:
+                  name: article
+                  fallbackUri: forward:/fallbacks/article
           - id: upload-service
             uri: lb://upload-service
             predicates:
@@ -90,6 +100,26 @@ spring:
                   name: user
                   fallbackUri: forward:/fallbacks/user
 
+gateway:
+  jwt:
+    secretKey: ${JWT_SECRET_KEY:secret}
+    issuer: ${JWT_ISSUER:www.farukgenc.com}
+    publicPaths:
+      - /api/auth/login
+      - /api/auth/register
+      - /api/products
+      - /api/products/**
+      - /api/categories
+      - /api/categories/**
+      - /api/brands
+      - /api/brands/**
+      - /api/articles
+      - /api/articles/**
+      - /fallbacks/**
+      - /actuator/**
+      - /v3/api-docs/**
+      - /swagger-ui/**
+      - /swagger-ui.html
 eureka:
   client:
     serviceUrl:
@@ -119,6 +149,15 @@ resilience4j.circuitbreaker:
         permittedNumberOfCallsInHalfOpenState: 3
         automaticTransitionFromOpenToHalfOpenEnabled: true
 
+      article:
+        registerHealthIndicator: true
+        event-consumer-buffer-size: 10
+        slidingWindowSize: 5
+        slidingWindowType: COUNT_BASED
+        failureRateThreshold: 50
+        waitDurationInOpenState: 5s
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
       upload:
         registerHealthIndicator: true
         event-consumer-buffer-size: 10
@@ -162,3 +201,5 @@ resilience4j.timelimiter:
       upload:
         timeoutDuration: 30s
         cancelRunningFuture: false
+
+

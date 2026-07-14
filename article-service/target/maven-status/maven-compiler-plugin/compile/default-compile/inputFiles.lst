@@ -1,0 +1,10 @@
+D:\2026\Java_Spring\evo-be\article-service\src\main\java\com\binhtv\articleservice\ArticleServiceApplication.java
+D:\2026\Java_Spring\evo-be\article-service\src\main\java\com\binhtv\articleservice\controller\ArticleController.java
+D:\2026\Java_Spring\evo-be\article-service\src\main\java\com\binhtv\articleservice\dto\ApiResponse.java
+D:\2026\Java_Spring\evo-be\article-service\src\main\java\com\binhtv\articleservice\dto\ArticleRequestDto.java
+D:\2026\Java_Spring\evo-be\article-service\src\main\java\com\binhtv\articleservice\dto\ArticleResponseDto.java
+D:\2026\Java_Spring\evo-be\article-service\src\main\java\com\binhtv\articleservice\dto\ValidationErrorDto.java
+D:\2026\Java_Spring\evo-be\article-service\src\main\java\com\binhtv\articleservice\exception\GlobalExceptionHandler.java
+D:\2026\Java_Spring\evo-be\article-service\src\main\java\com\binhtv\articleservice\model\Article.java
+D:\2026\Java_Spring\evo-be\article-service\src\main\java\com\binhtv\articleservice\repository\ArticleRepository.java
+D:\2026\Java_Spring\evo-be\article-service\src\main\java\com\binhtv\articleservice\service\ArticleService.java

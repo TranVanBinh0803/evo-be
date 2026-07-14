@@ -45,6 +45,26 @@ services:
       - discovery-server
       - kafka
 
+
+  article-service:
+    container_name: article-service
+    image: 'binhtv/ms-ex/article-service-image'
+    build:
+      context: ./article-service/
+    ports:
+      - "4048:4048"
+    expose:
+      - "4048"
+    environment:
+      - server.port=4048
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-articleservice:5438/article-service
+      - SPRING_DATASOURCE_USERNAME=articleservice-user
+      - SPRING_DATASOURCE_PASSWORD=123456
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - eureka.client.serviceUrl.defaultZone=http://discovery-server:8761/eureka
+    depends_on:
+      - postgres-articleservice
+      - discovery-server
   order-service:
     image: 'binhtv/ms-ex/order-service-image'
     container_name: order-service
@@ -202,6 +222,23 @@ services:
     command: -p 5431
     restart: unless-stopped
 
+
+  postgres-articleservice:
+    container_name: postgres-articleservice
+    image: postgres
+    environment:
+      POSTGRES_DB: article-service
+      POSTGRES_USER: articleservice-user
+      POSTGRES_PASSWORD: 123456
+      PGDATA: /data/postgres
+    volumes:
+      - ./postgres-articleservice:/data/postgres
+    expose:
+      - "5438"
+    ports:
+      - "5438:5438"
+    command: -p 5438
+    restart: unless-stopped
   mysql-orderservice:
     container_name: mysql-orderservice
     image: mysql
