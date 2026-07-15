@@ -26,6 +26,7 @@ public class JwtTokenManager {
 		return JWT.create()
 				.withSubject(email)
 				.withIssuer(jwtProperties.getIssuer())
+				.withClaim("accountId", user.getId().toString())
 				.withClaim("role", userRole.name())
 				.withIssuedAt(new Date())
 				.withExpiresAt(new Date(System.currentTimeMillis() + jwtProperties.getExpirationMinute() * 60 * 1000))

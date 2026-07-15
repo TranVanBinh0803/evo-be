@@ -32,6 +32,7 @@ public final class UserMapper {
 		}
 
 		final AuthenticatedUserDto authenticatedUserDto = new AuthenticatedUserDto();
+		authenticatedUserDto.setId(user.getId());
 		authenticatedUserDto.setUsername(user.getUsername());
 		authenticatedUserDto.setEmail(user.getEmail());
 		authenticatedUserDto.setPassword(user.getPassword());

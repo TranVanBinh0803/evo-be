@@ -5,6 +5,10 @@ HELP.md
 /product-service/target/
 /product-stock-service/target/
 /send-sms-service/target/
+/article-service/target/
+/auth-service/target/
+/user-service/target/
+/notification-service/target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/

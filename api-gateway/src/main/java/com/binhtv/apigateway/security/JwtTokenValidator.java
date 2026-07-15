@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class JwtTokenValidator {
     private static final String ROLE_CLAIM = "role";
+    private static final String ACCOUNT_ID_CLAIM = "accountId";
 
     private final GatewayJwtProperties jwtProperties;
 
@@ -27,8 +28,11 @@ public class JwtTokenValidator {
         JWTVerifier verifier = verification.build();
         DecodedJWT decodedJWT = verifier.verify(token);
 
-        return new JwtPrincipal(
-                decodedJWT.getSubject(),
-                decodedJWT.getClaim(ROLE_CLAIM).asString());
+        String accountId = decodedJWT.getClaim(ACCOUNT_ID_CLAIM).asString();
+        if (accountId == null || accountId.isBlank()) {
+            throw new com.auth0.jwt.exceptions.JWTVerificationException("JWT accountId claim is missing.");
+        }
+
+        return new JwtPrincipal(accountId, decodedJWT.getSubject(), decodedJWT.getClaim(ROLE_CLAIM).asString());
     }
 }

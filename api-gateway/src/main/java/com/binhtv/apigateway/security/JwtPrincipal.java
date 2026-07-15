@@ -1,4 +1,4 @@
 package com.binhtv.apigateway.security;
 
-public record JwtPrincipal(String email, String role) {
+public record JwtPrincipal(String accountId, String email, String role) {
 }

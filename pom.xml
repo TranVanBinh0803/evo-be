@@ -10,8 +10,7 @@
 		<module>api-gateway</module>
 		<module>discovery-server</module>
         <module>order-service</module>
-        <module>product-stock-service</module>
-		<module>send-sms-service</module>
+        <module>notification-service</module>
         <module>auth-service</module>
         <module>user-service</module>
 	</modules>

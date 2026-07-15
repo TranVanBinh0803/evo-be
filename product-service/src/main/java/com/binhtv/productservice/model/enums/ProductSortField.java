@@ -4,10 +4,10 @@ import java.util.Arrays;
 
 public enum ProductSortField {
     ID("id"),
-    NAME("name"),
+    CREATED_AT("createdAt"),
     PRICE("price"),
-    QUANTITY("quantity"),
-    DISCOUNT("discount");
+    SOLD_COUNT("soldCount"),
+    AVERAGE_RATING("averageRating");
 
     private final String property;
 

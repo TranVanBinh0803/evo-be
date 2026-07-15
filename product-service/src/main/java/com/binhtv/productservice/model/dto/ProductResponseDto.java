@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.UUID;
+import java.time.Instant;
 
 @Data
 @Builder
@@ -20,6 +21,11 @@ public class ProductResponseDto {
     private Integer discount;
     private Integer quantity;
     private String description;
+    private String origin;
+    private Double averageRating;
+    private Integer reviewCount;
+    private Long soldCount;
+    private Instant createdAt;
     private UUID brandId;
     private String brandName;
     private UUID categoryId;

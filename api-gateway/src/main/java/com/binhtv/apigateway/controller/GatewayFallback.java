@@ -72,6 +72,16 @@ public class GatewayFallback {
         return fallbackResponse("User service is unavailable. Please try later...");
     }
 
+    @GetMapping("/notification")
+    public ResponseEntity<ApiResponse<Void>> notificationFallback() {
+        return fallbackResponse("Notification service is unavailable. Please try later...");
+    }
+
+    @PostMapping("/notification")
+    public ResponseEntity<ApiResponse<Void>> notificationPostFallback() {
+        return fallbackResponse("Notification service is unavailable. Please try later...");
+    }
+
     private ResponseEntity<ApiResponse<Void>> fallbackResponse(String message) {
         ApiResponse<Void> response = new ApiResponse<>(message, HttpStatus.SERVICE_UNAVAILABLE.value(), null);
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(response);

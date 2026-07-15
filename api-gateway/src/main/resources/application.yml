@@ -43,7 +43,7 @@ spring:
           - id: order-service
             uri: lb://order-service
             predicates:
-              - Path=/api/orders/**
+              - Path=/api/orders/**,/api/payments/**
             filters:
               - name: CircuitBreaker
                 args:
@@ -100,10 +100,20 @@ spring:
                   name: user
                   fallbackUri: forward:/fallbacks/user
 
+          - id: notification-service
+            uri: lb://notification-service
+            predicates:
+              - Path=/api/contact,/api/newsletter/**
+            filters:
+              - name: CircuitBreaker
+                args:
+                  name: notification
+                  fallbackUri: forward:/fallbacks/notification
+
 gateway:
   jwt:
-    secretKey: ${JWT_SECRET_KEY:secret}
-    issuer: ${JWT_ISSUER:www.farukgenc.com}
+    secretKey: ${JWT_SECRET_KEY:change-me}
+    issuer: ${JWT_ISSUER:evo-auth-service}
     publicPaths:
       - /api/auth/login
       - /api/auth/register
@@ -115,6 +125,8 @@ gateway:
       - /api/brands/**
       - /api/articles
       - /api/articles/**
+      - /api/auth/oauth2/**
+      - /api/payments/vnpay/ipn
       - /fallbacks/**
       - /actuator/**
       - /v3/api-docs/**
@@ -122,6 +134,7 @@ gateway:
       - /swagger-ui.html
 eureka:
   client:
+    registry-fetch-interval-seconds: 5
     serviceUrl:
       defaultZone: http://localhost:8761/eureka
 
@@ -195,11 +208,21 @@ resilience4j.circuitbreaker:
         waitDurationInOpenState: 5s
         permittedNumberOfCallsInHalfOpenState: 3
         automaticTransitionFromOpenToHalfOpenEnabled: true
+      notification:
+        registerHealthIndicator: true
+        event-consumer-buffer-size: 10
+        slidingWindowSize: 5
+        slidingWindowType: COUNT_BASED
+        failureRateThreshold: 50
+        waitDurationInOpenState: 5s
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
 
 resilience4j.timelimiter:
     instances:
       upload:
         timeoutDuration: 30s
         cancelRunningFuture: false
-
-
+      user:
+        timeoutDuration: 5s
+        cancelRunningFuture: false

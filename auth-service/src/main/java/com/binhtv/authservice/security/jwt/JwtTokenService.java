@@ -1,9 +1,7 @@
 package com.binhtv.authservice.security.jwt;
 
-import com.binhtv.authservice.dto.AuthenticatedUserDto;
 import com.binhtv.authservice.dto.LoginRequest;
 import com.binhtv.authservice.dto.LoginResponse;
-import com.binhtv.authservice.mapper.UserMapper;
 import com.binhtv.authservice.model.User;
 import com.binhtv.authservice.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -35,9 +33,11 @@ public class JwtTokenService {
 
         authenticationManager.authenticate(authenticationToken);
 
-        final AuthenticatedUserDto authenticatedUserDto = authService.findAuthenticatedUserByEmail(email);
+        final User user = authService.findByEmail(email);
+        return createLoginResponse(user);
+    }
 
-        final User user = UserMapper.INSTANCE.convertToUser(authenticatedUserDto);
+    public LoginResponse createLoginResponse(User user) {
         final String token = jwtTokenManager.generateToken(user);
         final Date tokenExpiration = jwtTokenManager.getExpirationDateFromToken(token);
         final Instant expiresAt = tokenExpiration.toInstant();

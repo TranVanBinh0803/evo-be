@@ -42,6 +42,9 @@ public class ProductRequestDto {
     @Size(max = 1000, message = "Product description must not exceed 1000 characters.")
     private String description;
 
+    @Size(max = 100, message = "Product origin must not exceed 100 characters.")
+    private String origin;
+
     @NotNull(message = "Product brand id is required.")
     private UUID brandId;
 

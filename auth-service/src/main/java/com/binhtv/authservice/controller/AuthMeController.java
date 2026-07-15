@@ -23,6 +23,7 @@ public class AuthMeController {
         String email = authentication.getName();
         AuthenticatedUserDto authenticatedUser = userService.findAuthenticatedUserByEmail(email);
         LoginUserResponseDto userResponse = new LoginUserResponseDto(
+                authenticatedUser.getId(),
                 authenticatedUser.getUsername(),
                 authenticatedUser.getEmail(),
                 authenticatedUser.getUserRole());

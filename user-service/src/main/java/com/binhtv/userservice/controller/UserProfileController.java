@@ -1,6 +1,7 @@
 package com.binhtv.userservice.controller;
 
 import com.binhtv.userservice.model.UserProfile;
+import com.binhtv.userservice.dto.ApiResponse;
 import com.binhtv.userservice.service.UserProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,15 +22,16 @@ public class UserProfileController {
 	private final UserProfileService userProfileService;
 
 	@GetMapping
-	public ResponseEntity<List<UserProfile>> getUserProfiles() {
+	public ResponseEntity<ApiResponse<List<UserProfile>>> getUserProfiles() {
 
-		return new ResponseEntity<>(userProfileService.findAll(), HttpStatus.OK);
+		return ResponseEntity.ok(new ApiResponse<>("Get users successful!", 200, userProfileService.findAll()));
 	}
 
 	@GetMapping("/{accountId}")
-	public ResponseEntity<UserProfile> getByAccountId(@PathVariable UUID accountId) {
+	public ResponseEntity<ApiResponse<UserProfile>> getByAccountId(@PathVariable UUID accountId) {
 
 		final UserProfile userProfile = userProfileService.findByAccountId(accountId);
-		return new ResponseEntity<>(userProfile, userProfile == null ? HttpStatus.NOT_FOUND : HttpStatus.OK);
+		return new ResponseEntity<>(new ApiResponse<>(userProfile == null ? "User not found." : "Get user successful!",
+				userProfile == null ? 404 : 200, userProfile), userProfile == null ? HttpStatus.NOT_FOUND : HttpStatus.OK);
 	}
 }

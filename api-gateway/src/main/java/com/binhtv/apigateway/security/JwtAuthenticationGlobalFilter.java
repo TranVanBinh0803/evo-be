@@ -20,6 +20,7 @@ import reactor.core.publisher.Mono;
 public class JwtAuthenticationGlobalFilter implements GlobalFilter, Ordered {
     private static final String BEARER_PREFIX = "Bearer ";
     private static final String AUTHENTICATED_USER_HEADER = "X-Authenticated-User";
+    private static final String AUTHENTICATED_USER_ID_HEADER = "X-Authenticated-User-Id";
     private static final String USER_ROLE_HEADER = "X-User-Role";
 
     private final GatewayJwtProperties jwtProperties;
@@ -29,10 +30,11 @@ public class JwtAuthenticationGlobalFilter implements GlobalFilter, Ordered {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        ServerHttpRequest request = exchange.getRequest();
+        ServerHttpRequest request = withoutForwardedIdentityHeaders(exchange.getRequest());
+        ServerWebExchange sanitizedExchange = exchange.mutate().request(request).build();
 
         if (isPublicRequest(request)) {
-            return chain.filter(exchange);
+            return chain.filter(sanitizedExchange);
         }
 
         String authorizationHeader = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
@@ -46,7 +48,15 @@ public class JwtAuthenticationGlobalFilter implements GlobalFilter, Ordered {
         try {
             String token = authorizationHeader.substring(BEARER_PREFIX.length());
             JwtPrincipal principal = jwtTokenValidator.validate(token);
+            if (isAdminRequest(request) && !isAdmin(principal.role())) {
+                return responseWriter.write(
+                        exchange.getResponse(),
+                        HttpStatus.FORBIDDEN,
+                        "Administrator role is required.");
+            }
+
             ServerHttpRequest authenticatedRequest = request.mutate()
+                    .header(AUTHENTICATED_USER_ID_HEADER, principal.accountId())
                     .header(AUTHENTICATED_USER_HEADER, principal.email())
                     .header(USER_ROLE_HEADER, principal.role() == null ? "" : principal.role())
                     .build();
@@ -71,7 +81,56 @@ public class JwtAuthenticationGlobalFilter implements GlobalFilter, Ordered {
         }
 
         String path = request.getURI().getPath();
-        return jwtProperties.getPublicPaths().stream()
-                .anyMatch(pattern -> pathMatcher.match(pattern, path));
+        HttpMethod method = request.getMethod();
+
+        if (method == HttpMethod.GET && jwtProperties.getPublicPaths().stream()
+                .anyMatch(pattern -> pathMatcher.match(pattern, path))) {
+            return true;
+        }
+
+        if (method == HttpMethod.POST) {
+            return path.equals("/api/auth/login")
+                    || path.equals("/api/auth/register")
+                    || path.equals("/api/auth/forgot-password")
+                    || path.equals("/api/auth/reset-password")
+                    || path.equals("/api/auth/oauth2/exchange")
+                    || path.equals("/api/contact")
+                    || path.equals("/api/newsletter/subscriptions");
+        }
+
+        return pathMatcher.match("/fallbacks/**", path);
+    }
+
+    private ServerHttpRequest withoutForwardedIdentityHeaders(ServerHttpRequest request) {
+        return request.mutate()
+                .headers(headers -> {
+                    headers.remove(AUTHENTICATED_USER_ID_HEADER);
+                    headers.remove(AUTHENTICATED_USER_HEADER);
+                    headers.remove(USER_ROLE_HEADER);
+                })
+                .build();
+    }
+
+    private boolean isAdminRequest(ServerHttpRequest request) {
+        HttpMethod method = request.getMethod();
+        if (method == null || method == HttpMethod.GET || method == HttpMethod.HEAD
+                || method == HttpMethod.OPTIONS) {
+            return false;
+        }
+
+        String path = request.getURI().getPath();
+        if (pathMatcher.match("/api/products/*/reviews/**", path)
+                || pathMatcher.match("/api/products/*/reviews", path)) {
+            return false;
+        }
+
+        return pathMatcher.match("/api/products/**", path)
+                || pathMatcher.match("/api/categories/**", path)
+                || pathMatcher.match("/api/brands/**", path)
+                || pathMatcher.match("/api/articles/**", path);
+    }
+
+    private boolean isAdmin(String role) {
+        return "ADMIN".equalsIgnoreCase(role) || "ROLE_ADMIN".equalsIgnoreCase(role);
     }
 }
