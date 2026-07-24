@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/product-stocks")
@@ -22,7 +23,7 @@ public class ProductStockController {
 
     // host/api/product-stocks?productRefs=82d45bcf-ebee-4f83-b6cb-4982b7b19717&productRefs=f699dcac-6881-407b-83cf-aa1e92a52fef
     @GetMapping
-    public ResponseEntity<ProductStockResponseDto> checkProductsStock(@RequestParam List<String> productRefs){
+    public ResponseEntity<ProductStockResponseDto> checkProductsStock(@RequestParam List<UUID> productRefs){
         return new ResponseEntity<>(productService.checkProductsStock(productRefs), HttpStatus.OK);
     }
 }

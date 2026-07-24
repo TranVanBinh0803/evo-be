@@ -1,19 +1,15 @@
 package com.binhtv.orderservice.model.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
 @Data
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class ProductStockResponse{
+@AllArgsConstructor
+public class ProductStockItemRequest {
     private UUID productId;
-    private int requestedQuantity;
-    private int availableQuantity;
-    private boolean inStock;
+    private Integer quantity;
 }

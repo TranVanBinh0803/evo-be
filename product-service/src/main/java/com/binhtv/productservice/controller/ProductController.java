@@ -3,6 +3,8 @@ package com.binhtv.productservice.controller;
 import com.binhtv.productservice.model.dto.ApiResponse;
 import com.binhtv.productservice.model.dto.ProductRequestDto;
 import com.binhtv.productservice.model.dto.ProductResponseDto;
+import com.binhtv.productservice.model.dto.ProductStockRequestDto;
+import com.binhtv.productservice.model.dto.ProductStockResponseDto;
 import com.binhtv.productservice.model.dto.support.ApiResponses;
 import com.binhtv.productservice.model.enums.ProductSortField;
 import com.binhtv.productservice.service.ProductService;
@@ -54,6 +56,12 @@ public class ProductController {
     public ResponseEntity<ApiResponse<ProductResponseDto>> getProductById(@PathVariable UUID productId) {
         ProductResponseDto product = productService.getById(productId);
         return ApiResponses.ok("Get product successful!", product);
+    }
+
+    @PostMapping("/stock/check")
+    public ResponseEntity<ApiResponse<ProductStockResponseDto>> checkProductStock(
+            @Valid @RequestBody ProductStockRequestDto request) {
+        return ApiResponses.ok("Check product stock successful!", productService.checkProductsStock(request));
     }
 
     private Pageable buildPageable(Integer page, Integer size, String sortBy, Sort.Direction direction) {

@@ -3,6 +3,7 @@ package com.binhtv.orderservice.model.entity;
 import lombok.*;
 
 import java.util.List;
+import java.util.UUID;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -13,7 +14,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "t_orders")
+@Table(name = "orders")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,8 +22,8 @@ import jakarta.persistence.Table;
 @Builder
 public class Order {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
     @OneToMany(cascade = CascadeType.ALL)
     private List<OrderItem> orderItems;
 }

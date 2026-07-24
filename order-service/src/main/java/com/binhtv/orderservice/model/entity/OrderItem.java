@@ -3,6 +3,7 @@ package com.binhtv.orderservice.model.entity;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,7 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "t_order_items")
+@Table(name = "order_items")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -19,9 +20,9 @@ import jakarta.persistence.Table;
 @Builder
 public class OrderItem {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String ref;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+    private UUID ref;
     private BigDecimal price;
     private Integer quantity;
 }

@@ -1,5 +1,7 @@
 package com.binhtv.authservice.dto;
 
+import java.util.UUID;
+
 import com.binhtv.authservice.model.UserRole;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +11,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class AuthenticatedUserDto {
+	private UUID id;
 
 	private String username;
 

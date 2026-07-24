@@ -6,8 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public interface ProductRepository extends MongoRepository<Product, String > {
-    Optional<List<Product>> findByRefIn(List<String> productRefs);
+    Optional<List<Product>> findByRefIn(List<UUID> productRefs);
 }

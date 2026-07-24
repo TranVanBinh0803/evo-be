@@ -1,17 +1,19 @@
-package com.binhtv.orderservice.model.dto;
+package com.binhtv.productservice.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class ProductStockResponse{
+@AllArgsConstructor
+public class ProductStockResponse {
     private UUID productId;
     private int requestedQuantity;
     private int availableQuantity;
